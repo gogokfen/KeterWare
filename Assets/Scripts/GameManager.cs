@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI promptText;
     [SerializeField] Animator background;
     [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip[] audioClips;
     [SerializeField] MinigameData[] minigameDatas;
     void Start()
     {
@@ -44,7 +43,7 @@ public class GameManager : MonoBehaviour
         {
             if (!firstTime)
             {
-                audioSource.PlayOneShot(audioClips[2]);
+                SFXController.PlaySFX("Next", 0.2f);
                 yield return new WaitUntil(() => audioSource.isPlaying == false);
                 firstTime = true;
             }
@@ -55,12 +54,12 @@ public class GameManager : MonoBehaviour
             yield return new WaitUntil(() => !minigameActive);
             if (wonMG)
             {
-                audioSource.PlayOneShot(audioClips[0]);
+                SFXController.PlaySFX("WinMG", 0.2f);
                 wonMG = false;
             }
             else
             {
-                audioSource.PlayOneShot(audioClips[1]);
+                SFXController.PlaySFX("LossMG", 0.2f);
             }
             background.SetBool("MinigameActive", false);
             yield return new WaitForSeconds(0.5f);
@@ -71,12 +70,12 @@ public class GameManager : MonoBehaviour
             if (lives > 0)
             {
                 yield return new WaitUntil(() => audioSource.isPlaying == false);
-                audioSource.PlayOneShot(audioClips[2]);
+                SFXController.PlaySFX("Next", 0.2f);
                 yield return new WaitUntil(() => audioSource.isPlaying == false);
             }
         }
         yield return new WaitUntil(() => audioSource.isPlaying == false);
-        audioSource.PlayOneShot(audioClips[3]);
+        SFXController.PlaySFX("CompleteLoss", 0.2f);
         Debug.Log("Game Over");
     }
     public void LoseMG()
